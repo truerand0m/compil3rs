@@ -1,0 +1,344 @@
+   0  $accept : input $end
+
+   1  input :
+   2        | arith_expr NEWLINE
+
+   3  arith_expr : term
+   4             | term MAS arith_expr
+   5             | term MENOS arith_expr
+
+   6  term : factor
+   7       | factor POR term
+   8       | factor DIV term
+   9       | factor MODULO term
+  10       | factor DIVENTERA term
+
+  11  factor : MAS factor
+  12         | MENOS factor
+  13         | power
+
+  14  power : atom
+  15        | atom POTENCIA factor
+
+  16  atom : CADENA
+  17       | ENTERO
+  18       | REAL
+  19       | IDENTIFIER
+
+state 0
+	$accept : . input $end  (0)
+	input : .  (1)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	$end  reduce 1
+
+	input  goto 7
+	arith_expr  goto 8
+	term  goto 9
+	factor  goto 10
+	power  goto 11
+	atom  goto 12
+
+
+state 1
+	atom : CADENA .  (16)
+
+	.  reduce 16
+
+
+state 2
+	atom : IDENTIFIER .  (19)
+
+	.  reduce 19
+
+
+state 3
+	atom : ENTERO .  (17)
+
+	.  reduce 17
+
+
+state 4
+	atom : REAL .  (18)
+
+	.  reduce 18
+
+
+state 5
+	factor : MAS . factor  (11)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 13
+	power  goto 11
+	atom  goto 12
+
+
+state 6
+	factor : MENOS . factor  (12)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 14
+	power  goto 11
+	atom  goto 12
+
+
+state 7
+	$accept : input . $end  (0)
+
+	$end  accept
+
+
+state 8
+	input : arith_expr . NEWLINE  (2)
+
+	NEWLINE  shift 15
+	.  error
+
+
+state 9
+	arith_expr : term .  (3)
+	arith_expr : term . MAS arith_expr  (4)
+	arith_expr : term . MENOS arith_expr  (5)
+
+	MAS  shift 16
+	MENOS  shift 17
+	NEWLINE  reduce 3
+
+
+state 10
+	term : factor .  (6)
+	term : factor . POR term  (7)
+	term : factor . DIV term  (8)
+	term : factor . MODULO term  (9)
+	term : factor . DIVENTERA term  (10)
+
+	POR  shift 18
+	DIV  shift 19
+	DIVENTERA  shift 20
+	MODULO  shift 21
+	NEWLINE  reduce 6
+	MAS  reduce 6
+	MENOS  reduce 6
+
+
+state 11
+	factor : power .  (13)
+
+	.  reduce 13
+
+
+state 12
+	power : atom .  (14)
+	power : atom . POTENCIA factor  (15)
+
+	POTENCIA  shift 22
+	NEWLINE  reduce 14
+	MAS  reduce 14
+	MENOS  reduce 14
+	POR  reduce 14
+	DIV  reduce 14
+	DIVENTERA  reduce 14
+	MODULO  reduce 14
+
+
+state 13
+	factor : MAS factor .  (11)
+
+	.  reduce 11
+
+
+state 14
+	factor : MENOS factor .  (12)
+
+	.  reduce 12
+
+
+state 15
+	input : arith_expr NEWLINE .  (2)
+
+	.  reduce 2
+
+
+state 16
+	arith_expr : term MAS . arith_expr  (4)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	arith_expr  goto 23
+	term  goto 9
+	factor  goto 10
+	power  goto 11
+	atom  goto 12
+
+
+state 17
+	arith_expr : term MENOS . arith_expr  (5)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	arith_expr  goto 24
+	term  goto 9
+	factor  goto 10
+	power  goto 11
+	atom  goto 12
+
+
+state 18
+	term : factor POR . term  (7)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	term  goto 25
+	factor  goto 10
+	power  goto 11
+	atom  goto 12
+
+
+state 19
+	term : factor DIV . term  (8)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	term  goto 26
+	factor  goto 10
+	power  goto 11
+	atom  goto 12
+
+
+state 20
+	term : factor DIVENTERA . term  (10)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	term  goto 27
+	factor  goto 10
+	power  goto 11
+	atom  goto 12
+
+
+state 21
+	term : factor MODULO . term  (9)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	term  goto 28
+	factor  goto 10
+	power  goto 11
+	atom  goto 12
+
+
+state 22
+	power : atom POTENCIA . factor  (15)
+
+	CADENA  shift 1
+	IDENTIFIER  shift 2
+	ENTERO  shift 3
+	REAL  shift 4
+	MAS  shift 5
+	MENOS  shift 6
+	.  error
+
+	factor  goto 29
+	power  goto 11
+	atom  goto 12
+
+
+state 23
+	arith_expr : term MAS arith_expr .  (4)
+
+	.  reduce 4
+
+
+state 24
+	arith_expr : term MENOS arith_expr .  (5)
+
+	.  reduce 5
+
+
+state 25
+	term : factor POR term .  (7)
+
+	.  reduce 7
+
+
+state 26
+	term : factor DIV term .  (8)
+
+	.  reduce 8
+
+
+state 27
+	term : factor DIVENTERA term .  (10)
+
+	.  reduce 10
+
+
+state 28
+	term : factor MODULO term .  (9)
+
+	.  reduce 9
+
+
+state 29
+	power : atom POTENCIA factor .  (15)
+
+	.  reduce 15
+
+
+45 terminals, 7 nonterminals
+20 grammar rules, 30 states
